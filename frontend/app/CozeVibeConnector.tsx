@@ -47,7 +47,7 @@ function defaultSelection(schema: Schema, current: CozeVibeSelection): CozeVibeS
   const outputKeys = new Set(schema.outputParameters.map((item) => item.key));
   const inputParameter = inputKeys.has(current.inputParameter)
     ? current.inputParameter
-    : preferredParameter(schema.inputParameters, ["BOT_USER_INPUT", "USER_INPUT", "user_input", "message", "input", "content", "query", "city_name"]);
+    : preferredParameter(schema.inputParameters, ["BOT_USER_INPUT", "USER_INPUT", "user_input", "message_text", "message", "input", "content", "query", "city_name"]);
   const outputField = outputKeys.has(current.outputField)
     ? current.outputField
     : preferredParameter(schema.outputParameters, ["output", "answer", "text", "message", "content", "reply", "result"]);
