@@ -214,6 +214,7 @@ func parseContactUpload(filename string, data []byte) ([]contactTarget, error) {
 		if err != nil {
 			return nil, err
 		}
+		var firstErr error
 		for _, section := range strings.Split(value, "\n\n") {
 			lines := strings.Split(section, "\n")
 			if len(lines) < 2 {
@@ -225,7 +226,12 @@ func parseContactUpload(filename string, data []byte) ([]contactTarget, error) {
 			}
 			if targets, err := parseContactRows(rows, "excel"); err == nil {
 				return targets, nil
+			} else if firstErr == nil || strings.Contains(firstErr.Error(), "表头") {
+				firstErr = err
 			}
+		}
+		if firstErr != nil {
+			return nil, firstErr
 		}
 		return nil, errors.New("Excel 表头请包含手机号/电话或微信号")
 	}

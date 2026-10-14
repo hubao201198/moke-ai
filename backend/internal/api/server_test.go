@@ -82,3 +82,14 @@ func TestNextWeeklyScheduleShanghai(t *testing.T) {
 		t.Fatal("weekly schedule without days accepted")
 	}
 }
+
+func TestContactUploadRequiresWechatOrPhonePerRow(t *testing.T) {
+	rows, err := parseContactUpload("customers.csv", []byte("公司名称,手机号,微信号\nAcme,+491234,\nBeta,,wx_beta\n"))
+	if err != nil || len(rows) != 2 || rows[0].Phone != "+491234" || rows[1].Wechat != "wx_beta" {
+		t.Fatalf("valid contacts: rows=%#v error=%v", rows, err)
+	}
+	_, err = parseContactUpload("customers.csv", []byte("公司名称,手机号,微信号\nAcme,+491234,\nBeta,,\n"))
+	if err == nil || !strings.Contains(err.Error(), "第 3 行") {
+		t.Fatalf("missing contact must identify row 3, got %v", err)
+	}
+}
