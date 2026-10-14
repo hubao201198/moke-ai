@@ -15,7 +15,7 @@
 
 要求 Go 1.26、Node.js 22.13+、PostgreSQL，并在系统中提供 `pdftotext`（PDF 知识文件解析）。
 
-1. 参考 `.env.example` 在本机配置环境变量，至少设置 `DATABASE_URL`、`APP_ACCESS_PASSWORD` 和 `APP_SESSION_SECRET`。不要提交真实密钥。
+1. 参考 `.env.example` 在本机配置环境变量，至少设置 `DATABASE_URL`、`APP_ACCESS_PASSWORD` 和 `APP_SESSION_SECRET`。Neon 的 `DATABASE_URL` 使用连接池时，还须配置直连 `DATABASE_URL_UNPOOLED` 供数据库迁移使用。不要提交真实密钥。
 2. 在 `backend/` 执行 `go run ./cmd/server`（默认监听 `:8080`）。
 3. 在 `frontend/` 执行 `npm ci`、`npm run dev`。开发时可用 `vercel dev -L` 按生产路由同时启动两个服务；单独启动 Next.js 时需自行把 `/api/*` 代理到 Go。
 4. 运行 `go test ./...`、`go vet ./...`、`npm run lint`、`npm run build`。
