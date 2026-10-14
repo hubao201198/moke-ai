@@ -22,7 +22,7 @@
 
 ## 上线与安全
 
-Vercel 项目 Framework Preset 必须设为 **Services**；仅有 `vercel.json` 还不够。先验证 Preview，再将既有 `maoke-ai.vercel.app` 切换到新项目。上线前检查健康接口、登录、搜索、客户保存、审核、收件/退订和订单回款；生产密钥通过 Vercel 环境变量提供，不复制到仓库。`kuramathi.cn` 不属于此项目。
+Vercel 项目 Framework Preset 必须设为 **Services**；仅有 `vercel.json` 还不够。先在隔离数据库分支验证 Preview；验收通过后，将现有 `maoke-ai` Vercel 项目的 Git 连接改为本仓库、Framework Preset 改为 Services，沿用 `maoke-ai.vercel.app` 和现有生产密钥。上线前检查健康接口、登录、搜索、客户保存、审核、收件/退订和订单回款；不要把生产密钥复制到仓库。`kuramathi.cn` 不属于此项目。
 
 当前免费版 Cron 每日检查一次到期的自动化与邮件跟进任务（配置为 UTC 00:00 和 00:05，实际触发时间可能在当小时内）。因此“每周几几点”的计划不是准点发送，通常延迟到次日检查；任务积压或失败时可能更久。邮件草稿必须经人工审核才会通过 Resend 发送，每日上限 100 封。企微/微信任务无发送渠道时仅停留在待发送状态。
 
