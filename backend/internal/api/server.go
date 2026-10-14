@@ -37,7 +37,19 @@ func NewServer() *Server {
 			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 			defer cancel()
 			if err = pool.Ping(ctx); err == nil {
-				err = migrations.Apply(ctx, pool)
+				migrationPool := pool
+				if directURL := os.Getenv("DATABASE_URL_UNPOOLED"); directURL != "" {
+					migrationPool, err = pgxpool.New(ctx, directURL)
+					if err == nil {
+						defer migrationPool.Close()
+						err = migrationPool.Ping(ctx)
+					}
+				} else if strings.Contains(databaseURL, "-pooler.") {
+					err = errors.New("Neon 连接池不能用于迁移；请配置 DATABASE_URL_UNPOOLED")
+				}
+				if err == nil {
+					err = migrations.Apply(ctx, migrationPool)
+				}
 			}
 			if err == nil {
 				s.pool = pool
