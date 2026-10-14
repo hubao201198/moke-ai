@@ -1,0 +1,22 @@
+export type Lead = {
+  id: string;
+  company: string;
+  country: string;
+  city: string;
+  website: string;
+  description: string;
+  products: string[];
+  contact: string;
+  title: string;
+  email: string;
+  phone: string;
+  whatsapp: string;
+  socials: { label: string; url: string }[];
+  contactEvidence?: { field: string; value: string; url: string }[];
+  score: number;
+  stage: string;
+  source: string;
+  verifiedAt: string;
+  ownerId?: string;
+  saved?: boolean;
+};
