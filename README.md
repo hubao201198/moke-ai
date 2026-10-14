@@ -15,14 +15,14 @@
 
 要求 Go 1.26、Node.js 22.13+、PostgreSQL，并在系统中提供 `pdftotext`（PDF 知识文件解析）。
 
-1. 参考 `.env.example` 在本机配置环境变量，至少设置 `DATABASE_URL`、`APP_ACCESS_PASSWORD` 和 `APP_SESSION_SECRET`。不要提交真实密钥。
+1. 参考 `.env.example` 在本机配置环境变量，至少设置 `DATABASE_URL`、`APP_ACCESS_PASSWORD` 和 `APP_SESSION_SECRET`。Neon 的 `DATABASE_URL` 使用连接池时，还须配置直连 `DATABASE_URL_UNPOOLED` 供数据库迁移使用。不要提交真实密钥。
 2. 在 `backend/` 执行 `go run ./cmd/server`（默认监听 `:8080`）。
 3. 在 `frontend/` 执行 `npm ci`、`npm run dev`。开发时可用 `vercel dev -L` 按生产路由同时启动两个服务；单独启动 Next.js 时需自行把 `/api/*` 代理到 Go。
 4. 运行 `go test ./...`、`go vet ./...`、`npm run lint`、`npm run build`。
 
 ## 上线与安全
 
-Vercel 项目 Framework Preset 必须设为 **Services**；仅有 `vercel.json` 还不够。先验证 Preview，再将既有 `maoke-ai.vercel.app` 切换到新项目。上线前检查健康接口、登录、搜索、客户保存、审核、收件/退订和订单回款；生产密钥通过 Vercel 环境变量提供，不复制到仓库。`kuramathi.cn` 不属于此项目。
+Vercel 项目 Framework Preset 必须设为 **Services**；仅有 `vercel.json` 还不够。先在隔离数据库分支验证 Preview；验收通过后，将现有 `maoke-ai` Vercel 项目的 Git 连接改为本仓库、Framework Preset 改为 Services，沿用 `maoke-ai.vercel.app` 和现有生产密钥。上线前检查健康接口、登录、搜索、客户保存、审核、收件/退订和订单回款；不要把生产密钥复制到仓库。`kuramathi.cn` 不属于此项目。
 
 当前免费版 Cron 每日检查一次到期的自动化与邮件跟进任务（配置为 UTC 00:00 和 00:05，实际触发时间可能在当小时内）。因此“每周几几点”的计划不是准点发送，通常延迟到次日检查；任务积压或失败时可能更久。邮件草稿必须经人工审核才会通过 Resend 发送，每日上限 100 封。企微/微信任务无发送渠道时仅停留在待发送状态。
 
